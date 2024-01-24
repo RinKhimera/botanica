@@ -17,6 +17,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import { formSchema } from "@/lib/validation/formSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -33,13 +43,17 @@ const PlantForm = () => {
       name: "",
       species: "",
       dateOfPurchase: undefined,
+      watering: undefined,
+      frequency: undefined,
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+
     console.log(values)
+    console.log(JSON.stringify(values.dateOfPurchase))
   }
 
   return (
@@ -116,6 +130,58 @@ const PlantForm = () => {
               </Popover>
               <FormDescription>
                 La date d&apos;achat de la plante.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="watering"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Besoin en eau</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder="Entrez une valeur comprise entre 0 et 5"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>
+                Définissez le besoin en litre eau de la plante.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="frequency"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Fréquence d&apos;arrosage</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choisissez une fréquence d'arrosage." />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="1">Quotidien</SelectItem>
+                  <SelectItem value="2">Tous les deux jours</SelectItem>
+                  <SelectItem value="3">Tous les trois jours</SelectItem>
+                  <SelectItem value="7">Hebdomadaire</SelectItem>
+                  <SelectItem value="15">Bimensuel</SelectItem>
+                  <SelectItem value="30">Mensuel</SelectItem>
+                  <SelectItem value="90">Trimestriel</SelectItem>
+                  <SelectItem value="44">Jamais</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                Déterminez à quelle fréquence la plante doit être arrosée.
               </FormDescription>
               <FormMessage />
             </FormItem>
