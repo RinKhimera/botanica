@@ -1,5 +1,6 @@
 import SessionProvider from "@/components/SessionProvider"
 import SiteHeader from "@/components/SiteHeader"
+import { Toaster } from "@/components/ui/sonner"
 import type { Metadata } from "next"
 import { getServerSession } from "next-auth/next"
 import { Inter } from "next/font/google"
@@ -22,12 +23,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider session={session}>
-          <main className="mx-auto max-w-5xl gap-2">
-            <SiteHeader />
-            {children}
-          </main>
-        </SessionProvider>
+        <main className="mx-auto max-w-5xl gap-2">
+          {children}
+          <Toaster />
+        </main>
       </body>
     </html>
   )
