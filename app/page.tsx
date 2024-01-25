@@ -1,4 +1,5 @@
 import PlantForm from "@/components/PlantForm"
+import PlantList from "@/components/PlantList"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -37,6 +38,12 @@ export default function Home() {
             </DialogFooter> */}
           </DialogContent>
         </Dialog>
+      </div>
+
+      <div>
+        <h3>Mes plantes</h3>
+
+        <PlantList />
       </div>
     </main>
   )

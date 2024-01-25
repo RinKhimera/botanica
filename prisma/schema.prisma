@@ -6,6 +6,28 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model Plant {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String
+  species        String
+  dateOfPurchase DateTime
+  waterNeeds     Int
+  frequency      Int
+  watered        Boolean  @default(false)
+  // author         User?     @relation(fields: [userId], references: [id])
+  // userId         String?    @db.ObjectId
+}
+
+// model User {
+//   id    String  @id @default(auto()) @map("_id") @db.ObjectId
+//   email String  @unique
+//   name  String?
+//   posts Plant[]
+//   profile Profile?
+// }

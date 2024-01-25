@@ -14,6 +14,7 @@ export const formSchema = z.object({
 
   species: z
     .string()
+    .trim()
     .min(2, {
       message: "Le nom de l'espèce doit comporter au moins 2 caractères.",
     })
@@ -26,16 +27,22 @@ export const formSchema = z.object({
     required_error: "Une date d'achat est requise.",
   }),
 
-  watering: z.coerce
-    .number()
+  waterNeeds: z.coerce
+    .number({
+      invalid_type_error: "La valeur doit être comprise entre 0 et 5.",
+    })
     .nonnegative({
       message: "La valeur doit être non-négative.",
     })
-    .lt(5, {
+    .lte(5, {
       message: "La valeur doit être comprise entre 0 et 5.",
     }),
 
-  frequency: z.coerce.number().nonnegative({
-    message: "La valeur doit être non-négative.",
-  }),
+  frequency: z.coerce
+    .number({
+      invalid_type_error: "La sélection est nulle.",
+    })
+    .nonnegative({
+      message: "La valeur doit être non-négative.",
+    }),
 })

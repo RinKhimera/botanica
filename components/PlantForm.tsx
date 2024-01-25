@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { addPlant } from "@/lib/action"
 import { cn } from "@/lib/utils"
 import { formSchema } from "@/lib/validation/formSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -35,6 +36,7 @@ import { fr } from "date-fns/locale"
 import { CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+import { DialogClose } from "./ui/dialog"
 
 const PlantForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -43,17 +45,20 @@ const PlantForm = () => {
       name: "",
       species: "",
       dateOfPurchase: undefined,
-      watering: undefined,
+      waterNeeds: undefined,
       frequency: undefined,
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-
-    console.log(values)
-    console.log(JSON.stringify(values.dateOfPurchase))
+    try {
+      addPlant(values)
+      // form.reset()
+    } catch (error) {
+      console.log(error)
+    }
+    // console.log(values)
+    // console.log(JSON.stringify(values.dateOfPurchase))
   }
 
   return (
@@ -138,7 +143,7 @@ const PlantForm = () => {
 
         <FormField
           control={form.control}
-          name="watering"
+          name="waterNeeds"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Besoin en eau</FormLabel>
@@ -163,7 +168,10 @@ const PlantForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Fréquence d&apos;arrosage</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                // defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Choisissez une fréquence d'arrosage." />
@@ -177,7 +185,7 @@ const PlantForm = () => {
                   <SelectItem value="15">Bimensuel</SelectItem>
                   <SelectItem value="30">Mensuel</SelectItem>
                   <SelectItem value="90">Trimestriel</SelectItem>
-                  <SelectItem value="44">Jamais</SelectItem>
+                  <SelectItem value="0">Jamais</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription>
@@ -188,7 +196,7 @@ const PlantForm = () => {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Ajoutez</Button>
       </form>
     </Form>
   )
