@@ -1,6 +1,6 @@
 "use server"
 
-import prisma from "@/prisma/db"
+import prisma from "@/utils/db"
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
 import { formSchema } from "./validation/formSchema"

@@ -1,5 +1,4 @@
 import { findAllPlants } from "@/lib/action"
-import prisma from "@/prisma/db"
 import PlantItem from "./PlantItem"
 
 const PlantList = async () => {
