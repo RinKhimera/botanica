@@ -34,6 +34,7 @@ import { CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
+// Initialise le formulaire avec useForm et utilise le résolveur zodResolver avec le schéma Zod
 const PlantForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,20 +47,24 @@ const PlantForm = () => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  // Fonction de soumission du formulaire
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
     try {
+      // Appelle la fonction addPlant avec les valeurs du formulaire
       addPlant(values)
+      // Réinitialise le formulaire après la soumission
       form.reset()
     } catch (error) {
+      // Gère les erreurs en les affichant dans la console
       console.log(error)
     }
-    // console.log(values)
-    // console.log(JSON.stringify(values.dateOfPurchase))
   }
 
   return (
     <Form {...form}>
+      {/* Formulaire avec React Hook Form */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        {/* Champ de saisie pour le nom de la plante */}
         <FormField
           control={form.control}
           name="name"
@@ -75,6 +80,7 @@ const PlantForm = () => {
           )}
         />
 
+        {/* Champ de saisie pour l'espèce de la plante */}
         <FormField
           control={form.control}
           name="species"
@@ -92,6 +98,7 @@ const PlantForm = () => {
           )}
         />
 
+        {/* Champ de saisie pour la date d'achat de la plante */}
         <FormField
           control={form.control}
           name="dateOfPurchase"
@@ -137,6 +144,7 @@ const PlantForm = () => {
           )}
         />
 
+        {/* Champ de saisie pour les besoins en eau de la plante */}
         <FormField
           control={form.control}
           name="waterNeeds"
@@ -158,16 +166,14 @@ const PlantForm = () => {
           )}
         />
 
+        {/* Champ de saisie pour la fréquence d'arrosage de la plante */}
         <FormField
           control={form.control}
           name="frequency"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Fréquence d&apos;arrosage</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                // defaultValue={field.value}
-              >
+              <Select onValueChange={field.onChange}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Choisissez une fréquence d'arrosage." />
@@ -192,6 +198,7 @@ const PlantForm = () => {
           )}
         />
 
+        {/* Bouton de soumission du formulaire */}
         <Button type="submit">Ajoutez</Button>
       </form>
     </Form>

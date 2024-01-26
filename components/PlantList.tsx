@@ -2,8 +2,8 @@ import { findAllPlants } from "@/lib/action"
 import PlantItem from "./PlantItem"
 
 const PlantList = async () => {
+  // Récupère toutes les plantes de manière asynchrone
   const allPlants = await findAllPlants()
-  // console.log(allPlants)
 
   return (
     <div className="flex flex-col space-y-2">

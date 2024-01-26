@@ -1,12 +1,8 @@
-import SessionProvider from "@/components/SessionProvider"
-import SiteHeader from "@/components/SiteHeader"
 import { Toaster } from "@/components/ui/sonner"
 import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
-import { getServerSession } from "next-auth/next"
 import { Inter as FontSans } from "next/font/google"
 import "./globals.css"
-// const inter = Inter({ subsets: ["latin"] })
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -23,8 +19,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await getServerSession()
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body

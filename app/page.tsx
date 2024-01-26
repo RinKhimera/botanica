@@ -7,7 +7,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -21,6 +20,7 @@ export default async function Home() {
   return (
     <main>
       {!session ? (
+        // Rendu si aucun utilisateur est connecté
         <div>
           <h1 className="text-3xl font-semibold">Bienvenue sur Botanica!</h1>
           <p>
@@ -31,19 +31,22 @@ export default async function Home() {
           </Button>
         </div>
       ) : (
+        // Rendu si un utilisateur est connecté
         <main>
           <div className="flex justify-between mt-2">
+            {/* Section Avatar */}
             <Avatar>
               <AvatarImage src={session.user?.image as string} alt="@shadcn" />
               <AvatarFallback>XO</AvatarFallback>
             </Avatar>
+
             <div className="text-end max-w-[200px] ">
               <h2>
                 Bienvenue{" "}
                 <span className="font-medium">{session.user?.name}</span>{" "}
               </h2>
               <h2 className="font-medium">{session.user?.email}</h2>
-              <LogoutButton />
+              <LogoutButton /> {/* Bouton de déconnexion */}
             </div>
           </div>
 
@@ -54,6 +57,7 @@ export default async function Home() {
               grands.
             </p>
 
+            {/* Popover pour ajouter une plante */}
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline">Ajoutez une plante</Button>
@@ -66,8 +70,7 @@ export default async function Home() {
                     Veuillez renseigner les informations suivantes
                   </DialogDescription>
                 </DialogHeader>
-
-                <PlantForm />
+                <PlantForm /> {/* Formulaire d'ajout de plante */}
               </DialogContent>
             </Dialog>
           </section>
@@ -76,61 +79,10 @@ export default async function Home() {
             <h3 className="font-medium my-1 text-lg mt-4">
               Votre jardin intérieur
             </h3>
-            <PlantList />
+            <PlantList /> {/* Liste des plantes */}
           </section>
         </main>
       )}
     </main>
-
-    // <main>
-    //   <div className="p-10">
-    //     <h1>Hello from the index page, this is a public route</h1>
-    //     {session ? (
-    //       <div>
-    //         <h1>you are logged in </h1>
-    //         <LogoutButton />
-    //       </div>
-    //     ) : (
-    //       <div>
-    //         <h1>Pleae log in to see something special</h1>
-    //         <Button asChild>
-    //           <Link href="/auth">Login</Link>
-    //         </Button>
-    //       </div>
-    //     )}
-    //   </div>
-
-    //   <h1>Botanica</h1>
-
-    //   <div>
-    //     <h3>Ajoutez une plante</h3>
-
-    //     <Dialog>
-    //       <DialogTrigger asChild>
-    //         <Button variant="outline">Ajoutez une plante</Button>
-    //       </DialogTrigger>
-    //       <DialogContent className="sm:max-w-[600px]">
-    //         <DialogHeader>
-    //           <DialogTitle>Ajout de plantes</DialogTitle>
-    //           <DialogDescription>
-    //             Veuillez renseigner les informations suivantes
-    //           </DialogDescription>
-    //         </DialogHeader>
-
-    //         <PlantForm />
-
-    //         {/* <DialogFooter>
-    //           <Button type="submit">Save changes</Button>
-    //         </DialogFooter> */}
-    //       </DialogContent>
-    //     </Dialog>
-    //   </div>
-
-    //   <div>
-    //     <h3>Mes plantes</h3>
-
-    //     <PlantList />
-    //   </div>
-    // </main>
   )
 }
