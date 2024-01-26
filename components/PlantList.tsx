@@ -14,6 +14,8 @@ const PlantList = async () => {
           species={plant.species}
           waterNeeds={plant.waterNeeds}
           frequency={plant.frequency}
+          dateOfPurchase={plant.dateOfPurchase}
+          watered={plant.watered}
         />
       ))}
     </div>

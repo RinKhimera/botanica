@@ -1,12 +1,17 @@
 import SessionProvider from "@/components/SessionProvider"
 import SiteHeader from "@/components/SiteHeader"
 import { Toaster } from "@/components/ui/sonner"
+import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
 import { getServerSession } from "next-auth/next"
-import { Inter } from "next/font/google"
+import { Inter as FontSans } from "next/font/google"
 import "./globals.css"
+// const inter = Inter({ subsets: ["latin"] })
 
-const inter = Inter({ subsets: ["latin"] })
+export const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,9 +26,11 @@ export default async function RootLayout({
   const session = await getServerSession()
 
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <main className="mx-auto max-w-5xl gap-2">
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn("bg-background font-sans antialiased", fontSans.variable)}
+      >
+        <main className="mx-auto max-w-5xl px-3">
           {children}
           <Toaster />
         </main>

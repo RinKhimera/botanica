@@ -12,7 +12,7 @@ export default function SigninWithGithub() {
           callbackUrl: `${window.location.origin}`,
         })
       }
-      className="mt-6"
+      className="mt-4 hover:bg-slate-300"
       variant="secondary"
     >
       Login with Github <Github className="w-4 h-4 ml-4" />

@@ -21,8 +21,8 @@ model Plant {
   waterNeeds     Int
   frequency      Int
   watered        Boolean  @default(false)
-  owner          User?    @relation(fields: [userId], references: [id])
-  userId         String?
+  owner          User     @relation(fields: [userId], references: [id])
+  userId         String
 }
 
 model Account {

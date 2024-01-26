@@ -22,12 +22,15 @@ export default async function AuthRoute() {
     return redirect("/")
   }
   return (
-    <div className="w-screen h-screen flex items-center justify-center">
+    <div className="h-screen flex items-center justify-center">
       <Card>
         <CardHeader>
-          <CardTitle>Please sign in </CardTitle>
+          <h1 className="text-center text-4xl font-semibold italic">
+            Botanica!
+          </h1>
+          <CardTitle>Connectez-vous à votre compte.</CardTitle>
           <CardDescription>
-            To access the private page you have to be authenticated
+            Transformez votre espace en un havre de verdure.
           </CardDescription>
         </CardHeader>
         <CardContent>

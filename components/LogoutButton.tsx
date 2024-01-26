@@ -6,13 +6,14 @@ import { signOut } from "next-auth/react"
 export default function LogoutButton() {
   return (
     <Button
+      size={"sm"}
       onClick={() =>
         signOut({
           callbackUrl: `${window.location.origin}/auth`,
         })
       }
     >
-      Log out
+      Se déconnecter
     </Button>
   )
 }
