@@ -12,7 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { addDaysToDate } from "@/lib/action"
+import { addDaysToDate, compareDate } from "@/lib/action"
 import { format } from "date-fns"
 import { fr } from "date-fns/locale"
 
@@ -21,8 +21,9 @@ type PlantItemProps = {
   species: string
   waterNeeds: number
   frequency: number
-  dateOfPurchase: Date
   watered: boolean
+  dateOfPurchase: Date
+  updatedAt: Date
 }
 
 const PlantItem = ({
@@ -30,19 +31,21 @@ const PlantItem = ({
   species,
   waterNeeds,
   frequency,
-  dateOfPurchase,
   watered,
+  dateOfPurchase,
+  updatedAt,
 }: PlantItemProps) => {
-  console.log(dateOfPurchase)
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="w-full justify-between text-xl">
+        <Button
+          variant="ghost"
+          className="max-w-[500px] w-full justify-between text-xl"
+        >
           <div>{name}</div>
-          <div>
+          <div className="w-[120px] text-start">
             {waterNeeds}L | {frequency} jours
           </div>
-          <div></div>
         </Button>
       </DialogTrigger>
 
@@ -58,13 +61,16 @@ const PlantItem = ({
           </div>
           <div>
             <span className="font-medium underline">Besoin en eau</span> :{" "}
-            <span className="italic">{waterNeeds}</span>
+            <span className="italic">{`${waterNeeds} litres`}</span>
           </div>
           <div>
             <span className="font-medium underline">
               Fréquence d&apos;arrosage
             </span>{" "}
-            : <span className="italic">{frequency}</span>
+            :{" "}
+            <span className="italic">
+              {frequency === 0 ? "Jamais" : `Tous les ${frequency} jours`}
+            </span>
           </div>
           <div>
             <span className="font-medium underline">Date d&apos;achat</span> :{" "}
@@ -73,29 +79,34 @@ const PlantItem = ({
             </span>
           </div>
           <div>
+            <span className="font-medium underline">Dernier arrosage</span> :{" "}
+            <span className="italic">
+              {format(updatedAt, "PP", { locale: fr })}
+            </span>
+          </div>
+          <div>
             <span className="font-medium underline">Prochain arrosage</span> :{" "}
             <span className="italic">
-              {format(addDaysToDate(dateOfPurchase, frequency), "PP", {
-                locale: fr,
-              })}
+              {frequency === 0
+                ? "Jamais"
+                : format(addDaysToDate(updatedAt, frequency), "PP", {
+                    locale: fr,
+                  })}
+            </span>
+          </div>
+          <div>
+            <span className="font-medium underline">
+              Besoin d&apos;arrosage
+            </span>{" "}
+            :{" "}
+            {/* <span className="italic">{watered === false ? "Oui" : "Non"}</span> */}
+            <span className="italic">
+              {compareDate(addDaysToDate(updatedAt, frequency)) ? "Oui" : "Non"}
             </span>
           </div>
         </div>
       </DialogContent>
     </Dialog>
-
-    // <Popover>
-    //   <PopoverTrigger className="w-2/3">
-    //     <Button variant={"ghost"} className="w-full justify-start text-xl">
-    //       utton
-    //     </Button>
-    //   </PopoverTrigger>
-    //   <PopoverContent>exe</PopoverContent>
-    // </Popover>
-
-    // <div className="">
-    //   {name} | {species} | {waterNeeds} | {frequency}
-    // </div>
   )
 }
 

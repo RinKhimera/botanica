@@ -17,13 +17,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
@@ -36,7 +33,6 @@ import { fr } from "date-fns/locale"
 import { CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { DialogClose } from "./ui/dialog"
 
 const PlantForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -53,7 +49,7 @@ const PlantForm = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       addPlant(values)
-      // form.reset()
+      form.reset()
     } catch (error) {
       console.log(error)
     }

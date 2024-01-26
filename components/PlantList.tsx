@@ -6,7 +6,7 @@ const PlantList = async () => {
   // console.log(allPlants)
 
   return (
-    <div>
+    <div className="flex flex-col space-y-2">
       {allPlants.map((plant) => (
         <PlantItem
           key={plant.id}
@@ -16,6 +16,7 @@ const PlantList = async () => {
           frequency={plant.frequency}
           dateOfPurchase={plant.dateOfPurchase}
           watered={plant.watered}
+          updatedAt={plant.updatedAt}
         />
       ))}
     </div>

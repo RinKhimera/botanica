@@ -20,7 +20,7 @@ model Plant {
   dateOfPurchase DateTime
   waterNeeds     Int
   frequency      Int
-  watered        Boolean  @default(false)
+  watered        Boolean  @default(true)
   owner          User     @relation(fields: [userId], references: [id])
   userId         String
 }

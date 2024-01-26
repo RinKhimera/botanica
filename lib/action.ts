@@ -31,6 +31,7 @@ export const addPlant = async (values: z.infer<typeof formSchema>) => {
           dateOfPurchase: values.dateOfPurchase,
           waterNeeds: values.waterNeeds,
           frequency: values.frequency,
+          watered: true,
           owner: {
             connect: {
               id: user?.id,
@@ -44,6 +45,7 @@ export const addPlant = async (values: z.infer<typeof formSchema>) => {
     console.error("Error creating plant:", error)
   }
 }
+
 export const addDaysToDate = (dateString: Date, daysToAdd: number) => {
   const date = new Date(dateString)
   date.setDate(date.getDate() + daysToAdd)
@@ -56,4 +58,16 @@ export const addDaysToDate = (dateString: Date, daysToAdd: number) => {
   const seconds = String(date.getSeconds()).padStart(2, "0")
 
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`
+}
+
+export const compareDate = (givenDate: Date | string) => {
+  const currentDate = new Date() // Obtient la date actuelle
+  const givenDateTime = new Date(givenDate) // Convertit la date donnée en objet Date
+
+  // Compare les timestamps des deux dates
+  if (currentDate > givenDateTime) {
+    return true // La date actuelle est plus récente que la date donnée
+  } else {
+    return false // La date actuelle est antérieure ou égale à la date donnée
+  }
 }
