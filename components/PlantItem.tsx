@@ -7,14 +7,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import { addDaysToDate, compareDate } from "@/lib/action"
 import { format } from "date-fns"
-import { fr, id } from "date-fns/locale"
+import { fr } from "date-fns/locale"
 import DeleteAndWaterButton from "./DeleteAndWaterButton"
 
 // Définit le type des props du composant PlantItem
@@ -39,14 +34,16 @@ const PlantItem = ({
   dateOfPurchase,
   updatedAt,
 }: PlantItemProps) => {
+  const nextWateringDate = addDaysToDate(updatedAt, frequency)
+
   return (
-    <div className="flex justify-between">
+    <div className="flex space-x-5 max-w-[700px]">
       {/* Popover pour voir les détails d'une plante */}
       <Dialog>
         <DialogTrigger asChild>
           <Button
             variant="ghost"
-            className="max-w-[500px] w-full justify-between text-xl"
+            className="max-w-[450px] w-full justify-between text-xl"
           >
             <div>{name}</div>
             <div className="w-[120px] text-start">
@@ -109,7 +106,7 @@ const PlantItem = ({
               <span className="italic">
                 {frequency === 0
                   ? "Jamais"
-                  : format(addDaysToDate(updatedAt, frequency), "PP", {
+                  : format(nextWateringDate, "PP", {
                       locale: fr,
                     })}
               </span>
@@ -122,15 +119,13 @@ const PlantItem = ({
               </span>{" "}
               :{" "}
               <span className="italic">
-                {compareDate(addDaysToDate(updatedAt, frequency))
-                  ? "Oui"
-                  : "Non"}
+                {compareDate(nextWateringDate) ? "Oui" : "Non"}
               </span>
             </div>
           </div>
         </DialogContent>
       </Dialog>
-      <DeleteAndWaterButton plantId={id} />
+      <DeleteAndWaterButton plantId={id} watered={watered} />
     </div>
   )
 }

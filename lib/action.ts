@@ -36,7 +36,7 @@ export const addPlant = async (values: z.infer<typeof formSchema>) => {
         dateOfPurchase: values.dateOfPurchase,
         waterNeeds: values.waterNeeds,
         frequency: values.frequency,
-        watered: true,
+        watered: false,
         owner: {
           connect: {
             id: user?.id, // Connecte la plante à l'utilisateur
@@ -63,6 +63,38 @@ export const deletePlant = async (plantId: string) => {
     console.log("Plant deleted successfully.")
   } catch (error) {
     console.error("Error deleting plant:", error)
+  }
+}
+
+export const waterPlant = async (plantId: string) => {
+  try {
+    // Rechercher la plante dans la base de données grâce à son ID
+    const plant = await prisma.plant.findUnique({
+      where: {
+        id: plantId,
+      },
+    })
+
+    if (!plant) {
+      throw new Error(`Plant with ID ${plantId} not found.`)
+    }
+
+    // Basculer le statut « watered » en fonction de son état précédent
+    await prisma.plant.update({
+      where: {
+        id: plantId,
+      },
+      data: {
+        watered: !plant.watered,
+      },
+    })
+    revalidatePath("/")
+    console.log(
+      `Watered status of plant with ID ${plantId} toggled successfully.`
+    )
+  } catch (error) {
+    console.error("Error toggling watered status:", error)
+    throw error // Relancez l'erreur pour la gestion à des niveaux supérieurs
   }
 }
 

@@ -24,10 +24,8 @@ export default async function RootLayout({
       <body
         className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
-        <main className="mx-auto max-w-5xl px-3">
-          {children}
-          <Toaster />
-        </main>
+        <main className="mx-auto max-w-5xl px-3">{children}</main>
+        <Toaster />
       </body>
     </html>
   )

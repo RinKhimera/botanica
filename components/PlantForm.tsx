@@ -30,12 +30,16 @@ import { formSchema } from "@/lib/validation/formSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { format } from "date-fns"
 import { fr } from "date-fns/locale"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, Loader2 } from "lucide-react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import * as z from "zod"
 
 // Initialise le formulaire avec useForm et utilise le résolveur zodResolver avec le schéma Zod
 const PlantForm = () => {
+  const [submitting, setSubmitting] = useState(false)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,15 +52,24 @@ const PlantForm = () => {
   })
 
   // Fonction de soumission du formulaire
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setSubmitting(true)
     try {
       // Appelle la fonction addPlant avec les valeurs du formulaire
-      addPlant(values)
+      await addPlant(values)
       // Réinitialise le formulaire après la soumission
-      form.reset()
     } catch (error) {
       // Gère les erreurs en les affichant dans la console
       console.log(error)
+    } finally {
+      setSubmitting(false)
+      toast("Plante créee !", {
+        description: "Une plante a été ajoutée avec succès",
+        action: {
+          label: "OK",
+          onClick: () => console.log("OK"),
+        },
+      })
     }
   }
 
@@ -199,7 +212,14 @@ const PlantForm = () => {
         />
 
         {/* Bouton de soumission du formulaire */}
-        <Button type="submit">Ajoutez</Button>
+        {submitting ? (
+          <Button disabled>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Patientez svp
+          </Button>
+        ) : (
+          <Button type="submit">Ajouter</Button>
+        )}
       </form>
     </Form>
   )

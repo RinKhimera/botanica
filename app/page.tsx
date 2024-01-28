@@ -36,14 +36,17 @@ export default async function Home() {
           <div className="flex justify-between mt-2">
             {/* Section Avatar */}
             <Avatar>
-              <AvatarImage src={session.user?.image as string} alt="@shadcn" />
+              <AvatarImage
+                src={session.user?.image as string}
+                alt="Avatar image"
+              />
               <AvatarFallback>XO</AvatarFallback>
             </Avatar>
 
             <div className="text-end max-w-[200px] ">
               <h2>
                 Bienvenue{" "}
-                <span className="font-medium">{session.user?.name}</span>{" "}
+                <span className="font-medium">{session.user?.name}!</span>{" "}
               </h2>
               <h2 className="font-medium">{session.user?.email}</h2>
               <LogoutButton /> {/* Bouton de déconnexion */}
@@ -60,7 +63,9 @@ export default async function Home() {
             {/* Popover pour ajouter une plante */}
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline">Ajoutez une plante</Button>
+                <Button variant="outline" className="text-lg">
+                  Ajoutez une plante
+                </Button>
               </DialogTrigger>
 
               <DialogContent className="sm:max-w-[600px]">
