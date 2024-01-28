@@ -28,27 +28,41 @@ export const addPlant = async (values: z.infer<typeof formSchema>) => {
   })
 
   try {
-    {
-      // Crée une nouvelle plante dans la base de données
-      await prisma.plant.create({
-        data: {
-          name: values.name,
-          species: values.species,
-          dateOfPurchase: values.dateOfPurchase,
-          waterNeeds: values.waterNeeds,
-          frequency: values.frequency,
-          watered: true,
-          owner: {
-            connect: {
-              id: user?.id, // Connecte la plante à l'utilisateur
-            },
+    // Crée une nouvelle plante dans la base de données
+    await prisma.plant.create({
+      data: {
+        name: values.name,
+        species: values.species,
+        dateOfPurchase: values.dateOfPurchase,
+        waterNeeds: values.waterNeeds,
+        frequency: values.frequency,
+        watered: true,
+        owner: {
+          connect: {
+            id: user?.id, // Connecte la plante à l'utilisateur
           },
         },
-      })
-      revalidatePath("/")
-    }
+      },
+    })
+    revalidatePath("/")
+    console.log("Plant created successfully.")
   } catch (error) {
     console.error("Error creating plant:", error)
+  }
+}
+
+export const deletePlant = async (plantId: string) => {
+  try {
+    // Supprimer la plante de la base de données en fonction de son ID
+    await prisma.plant.delete({
+      where: {
+        id: plantId,
+      },
+    })
+    revalidatePath("/")
+    console.log("Plant deleted successfully.")
+  } catch (error) {
+    console.error("Error deleting plant:", error)
   }
 }
 

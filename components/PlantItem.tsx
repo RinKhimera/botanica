@@ -14,10 +14,12 @@ import {
 } from "@/components/ui/popover"
 import { addDaysToDate, compareDate } from "@/lib/action"
 import { format } from "date-fns"
-import { fr } from "date-fns/locale"
+import { fr, id } from "date-fns/locale"
+import DeleteAndWaterButton from "./DeleteAndWaterButton"
 
 // Définit le type des props du composant PlantItem
 type PlantItemProps = {
+  id: string
   name: string
   species: string
   waterNeeds: number
@@ -28,6 +30,7 @@ type PlantItemProps = {
 }
 
 const PlantItem = ({
+  id,
   name,
   species,
   waterNeeds,
@@ -37,7 +40,7 @@ const PlantItem = ({
   updatedAt,
 }: PlantItemProps) => {
   return (
-    <div>
+    <div className="flex justify-between">
       {/* Popover pour voir les détails d'une plante */}
       <Dialog>
         <DialogTrigger asChild>
@@ -127,6 +130,7 @@ const PlantItem = ({
           </div>
         </DialogContent>
       </Dialog>
+      <DeleteAndWaterButton plantId={id} />
     </div>
   )
 }

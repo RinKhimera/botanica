@@ -10,6 +10,7 @@ const PlantList = async () => {
       {allPlants.map((plant) => (
         <PlantItem
           key={plant.id}
+          id={plant.id}
           name={plant.name}
           species={plant.species}
           waterNeeds={plant.waterNeeds}
