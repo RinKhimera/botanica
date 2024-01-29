@@ -33,8 +33,8 @@ export default async function Home() {
       ) : (
         // Rendu si un utilisateur est connecté
         <main>
-          <div className="flex justify-between mt-2">
-            {/* Section Avatar */}
+          {/* Section Header */}
+          <header className="flex justify-between mt-2">
             <Avatar>
               <AvatarImage
                 src={session.user?.image as string}
@@ -51,7 +51,7 @@ export default async function Home() {
               <h2 className="font-medium">{session.user?.email}</h2>
               <LogoutButton /> {/* Bouton de déconnexion */}
             </div>
-          </div>
+          </header>
 
           <section>
             <h1 className="text-5xl font-bold italic mt-5">Botanica!</h1>
@@ -80,6 +80,7 @@ export default async function Home() {
             </Dialog>
           </section>
 
+          {/* Section Liste des plantes */}
           <section>
             <h3 className="font-medium my-1 text-lg mt-4">
               Votre jardin intérieur

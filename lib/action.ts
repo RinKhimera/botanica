@@ -8,26 +8,45 @@ import { z } from "zod"
 import { formSchema } from "./validation/formSchema"
 
 // Récupère toutes les plantes de la base de données à l'aide de Prisma
-export const findAllPlants = async () => await prisma.plant.findMany()
-
-//
-export const addPlant = async (values: z.infer<typeof formSchema>) => {
-  // Récupère la session serveur
-  const session = await getServerSession(authOptions)
-  // Récupère l'email de l'utilisateur à partir de la session
-  const userEmail = session?.user?.email as string | undefined
-
-  // Recherche l'utilisateur dans la base de données en utilisant son email
-  const user = await prisma.user.findUnique({
-    where: {
-      email: userEmail,
-    },
-    select: {
-      id: true,
-    },
-  })
-
+export const findAllPlants = async () => {
   try {
+    // Récupérer toutes les plantes de la base de données, triées par watered (faux en premier) et ensuite par updatedAt (les plus récents d'abord)
+    const plants = await prisma.plant.findMany({
+      orderBy: [
+        {
+          watered: "asc", // Trier par le champ watered par ordre croissant (faux en premier)
+        },
+        {
+          updatedAt: "desc", // Ensuite, trier par le champ updatedAt par ordre décroissant (les plus récents d'abord)
+        },
+      ],
+    })
+
+    return plants
+  } catch (error) {
+    console.error("Erreur lors de la récupération des plantes :", error)
+    throw error // Relancer l'erreur pour la gérer à des niveaux supérieurs
+  }
+}
+
+// Ajoute une plante à la base de données
+export const addPlant = async (values: z.infer<typeof formSchema>) => {
+  try {
+    // Récupère la session serveur
+    const session = await getServerSession(authOptions)
+    // Récupère l'email de l'utilisateur à partir de la session
+    const userEmail = session?.user?.email as string | undefined
+
+    // Recherche l'utilisateur dans la base de données en utilisant son email
+    const user = await prisma.user.findUnique({
+      where: {
+        email: userEmail, // Condition de recherche : l'email de l'utilisateur
+      },
+      select: {
+        id: true, // Sélectionne uniquement l'ID de l'utilisateur
+      },
+    })
+
     // Crée une nouvelle plante dans la base de données
     await prisma.plant.create({
       data: {
@@ -36,36 +55,44 @@ export const addPlant = async (values: z.infer<typeof formSchema>) => {
         dateOfPurchase: values.dateOfPurchase,
         waterNeeds: values.waterNeeds,
         frequency: values.frequency,
-        watered: false,
+        watered: false, // Par défaut, la plante n'a pas été arrosée
         owner: {
           connect: {
-            id: user?.id, // Connecte la plante à l'utilisateur
+            id: user?.id, // Connecte la plante à l'utilisateur en utilisant son ID
           },
         },
       },
     })
+
+    // Re-valider la page pour refléter les changements
     revalidatePath("/")
+    // Afficher un message de succès dans la console
     console.log("Plant created successfully.")
   } catch (error) {
+    // En cas d'erreur, afficher l'erreur dans la console
     console.error("Error creating plant:", error)
   }
 }
 
+// Supprime une plante de la base de données
 export const deletePlant = async (plantId: string) => {
   try {
     // Supprimer la plante de la base de données en fonction de son ID
     await prisma.plant.delete({
       where: {
-        id: plantId,
+        id: plantId, // Condition de suppression : l'ID de la plante à supprimer
       },
     })
+    // Re-valider la page pour refléter les changements
     revalidatePath("/")
+    // Afficher un message de succès dans la console
     console.log("Plant deleted successfully.")
   } catch (error) {
+    // En cas d'erreur, afficher l'erreur dans la console
     console.error("Error deleting plant:", error)
   }
 }
-
+// Modifie le statut d'arrosage d'une plante dans la base de données
 export const waterPlant = async (plantId: string) => {
   try {
     // Rechercher la plante dans la base de données grâce à son ID
@@ -98,6 +125,7 @@ export const waterPlant = async (plantId: string) => {
   }
 }
 
+// Calcule une nouvelle date au format ISO 8601 en fonction d'un nombre de jours
 export const addDaysToDate = (dateString: Date, daysToAdd: number) => {
   // Convertit la chaîne de caractères en objet Date
   const date = new Date(dateString)
@@ -116,6 +144,7 @@ export const addDaysToDate = (dateString: Date, daysToAdd: number) => {
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`
 }
 
+// Compare une date donnée et la date actuelle
 export const compareDate = (givenDate: Date | string) => {
   // Obtient la date actuelle
   const currentDate = new Date()

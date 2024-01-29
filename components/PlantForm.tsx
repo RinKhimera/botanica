@@ -36,10 +36,11 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 
-// Initialise le formulaire avec useForm et utilise le résolveur zodResolver avec le schéma Zod
 const PlantForm = () => {
+  // État local pour gérer l'état de soumission du formulaire
   const [submitting, setSubmitting] = useState(false)
 
+  // Initialise le formulaire avec useForm et utilise le résolveur zodResolver avec le schéma Zod
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,23 +54,32 @@ const PlantForm = () => {
 
   // Fonction de soumission du formulaire
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    // Met à jour l'état de soumission pour indiquer que la soumission est en cours
     setSubmitting(true)
     try {
       // Appelle la fonction addPlant avec les valeurs du formulaire
       await addPlant(values)
-      // Réinitialise le formulaire après la soumission
-    } catch (error) {
-      // Gère les erreurs en les affichant dans la console
-      console.log(error)
-    } finally {
-      setSubmitting(false)
-      toast("Plante créee !", {
-        description: "Une plante a été ajoutée avec succès",
+      // Affiche une notification pour indiquer que la plante a été ajoutée avec succès
+      toast("Plante créée !", {
+        description: "Une plante a été ajoutée avec succès.",
         action: {
           label: "OK",
           onClick: () => console.log("OK"),
         },
       })
+    } catch (error) {
+      // Gère les erreurs en les affichant dans la console
+      console.log(error)
+      toast("Oops!", {
+        description: "Une erreur s'est produite. Veuillez réessayer plus tard.",
+        action: {
+          label: "OK",
+          onClick: () => console.log("OK"),
+        },
+      })
+    } finally {
+      // Rétablit l'état de soumission une fois la soumission terminée
+      setSubmitting(false)
     }
   }
 

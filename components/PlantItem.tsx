@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -37,7 +38,7 @@ const PlantItem = ({
   const nextWateringDate = addDaysToDate(updatedAt, frequency)
 
   return (
-    <div className="flex space-x-5 max-w-[700px]">
+    <div className="flex space-x-3 max-w-[700px]">
       {/* Popover pour voir les détails d'une plante */}
       <Dialog>
         <DialogTrigger asChild>
@@ -46,9 +47,11 @@ const PlantItem = ({
             className="max-w-[450px] w-full justify-between text-xl"
           >
             <div>{name}</div>
-            <div className="w-[120px] text-start">
-              {waterNeeds}L | {frequency} jours
-            </div>
+            {watered ? (
+              <Badge>Arrosé</Badge>
+            ) : (
+              <Badge variant="destructive">Besoin d&apos;arrosage</Badge>
+            )}
           </Button>
         </DialogTrigger>
 
@@ -119,12 +122,13 @@ const PlantItem = ({
               </span>{" "}
               :{" "}
               <span className="italic">
-                {compareDate(nextWateringDate) ? "Oui" : "Non"}
+                {watered && !compareDate(nextWateringDate) ? "Non" : "Oui"}
               </span>
             </div>
           </div>
         </DialogContent>
       </Dialog>
+      {/* Boutons de suppression et de modification du statut de la plante */}
       <DeleteAndWaterButton plantId={id} watered={watered} />
     </div>
   )
