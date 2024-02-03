@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
@@ -24,7 +25,16 @@ export default async function RootLayout({
       <body
         className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
-        <main className="mx-auto max-w-5xl px-3">{children}</main>
+        <main className="mx-auto max-w-5xl px-3">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </main>
         <Toaster />
       </body>
     </html>

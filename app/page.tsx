@@ -1,3 +1,4 @@
+import { ModeToggle } from "@/components/DarkModeToggle"
 import LogoutButton from "@/components/LogoutButton"
 import PlantForm from "@/components/PlantForm"
 import PlantList from "@/components/PlantList"
@@ -35,13 +36,16 @@ export default async function Home() {
         <main>
           {/* Section Header */}
           <header className="flex justify-between mt-2">
-            <Avatar>
-              <AvatarImage
-                src={session.user?.image as string}
-                alt="Avatar image"
-              />
-              <AvatarFallback>XO</AvatarFallback>
-            </Avatar>
+            <div className="flex space-x-3">
+              <Avatar>
+                <AvatarImage
+                  src={session.user?.image as string}
+                  alt="Avatar image"
+                />
+                <AvatarFallback>XO</AvatarFallback>
+              </Avatar>
+              <ModeToggle />
+            </div>
 
             <div className="text-end max-w-[200px] ">
               <h2>
