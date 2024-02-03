@@ -1,5 +1,16 @@
 "use client"
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { deletePlant, waterPlant } from "@/lib/action"
 import { Droplets, Undo2, XCircle } from "lucide-react"
 import { useState } from "react"
@@ -40,7 +51,7 @@ const DeleteAndWaterButton = ({
         description: "Une erreur s'est produite. Veuillez réessayer plus tard.",
         action: {
           label: "OK",
-          onClick: () => console.log("OK"),
+          onClick: () => console.log("Error"),
         },
       })
     } finally {
@@ -83,15 +94,33 @@ const DeleteAndWaterButton = ({
   return (
     <div className="flex gap-2">
       {/* Bouton de suppression de la plante */}
-      <Button
-        className="hover:bg-destructive hover:text-primary-foreground"
-        onClick={handleDeletePlant}
-        variant={"outline"}
-        size={"icon"}
-        disabled={submitting} // Désactive le bouton pendant la soumission
-      >
-        <XCircle />
-      </Button>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button
+            className="hover:bg-destructive hover:text-primary-foreground"
+            variant={"outline"}
+            size={"icon"}
+            disabled={submitting} // Désactive le bouton pendant la soumission
+          >
+            <XCircle />
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Êtes-vous absolument sûr(e) ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action est irréversible. Elle supprimera définitivement
+              votre plante.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeletePlant}>
+              Supprimer
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Bouton d'arrosage de la plante */}
       {watered ? (
